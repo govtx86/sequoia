@@ -40,9 +40,10 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 }
 
 func main() {
-	var port int
-	flag.IntVar(&port, "port", 8080, "Go backend server port")
-	flag.Parse()
+	port := os.Getenv("BACKEND_PORT")
+    if port == "" {
+        port = "8080" // Fallback default
+    }
 
 	app, err := app.NewApplication()
 	if err != nil {
