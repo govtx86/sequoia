@@ -2,15 +2,17 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"os/signal"
 	"sequoia/internal/app"
 	"sequoia/internal/routes"
+	"strconv"
 	"syscall"
 	"time"
+
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -40,9 +42,9 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 }
 
 func main() {
-	port := os.Getenv("BACKEND_PORT")
-    if port == "" {
-        port = "8080" // Fallback default
+	port, err := strconv.Atoi(os.Getenv("BACKEND_PORT"))
+    if err != nil {
+        port = 8080 // Fallback default
     }
 
 	app, err := app.NewApplication()
